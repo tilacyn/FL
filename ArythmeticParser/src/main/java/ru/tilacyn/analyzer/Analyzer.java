@@ -34,18 +34,18 @@ public class Analyzer {
             if (elements.get(start).number == -1) {
                 throw new AnalyzeException("Analyze failed at point: " + start);
             }
-            System.out.println(elements.get(start).number);
+            //System.out.println(elements.get(start).number);
 
             return elements.get(start).number;
         }
 
         if (findLeftOperand(Element::isPlus)) {
-            System.out.println("PLUS");
+            //System.out.println("PLUS");
             return a1.analyze() + a2.analyze();
         }
 
         if (findRightOperand(Element::isMinus)) {
-            System.out.println("MINUS");
+            //System.out.println("MINUS");
             return a1.analyze() - a2.analyze();
         }
 
@@ -54,6 +54,10 @@ public class Analyzer {
         }
 
         if (findRightOperand(Element::isDiv)) {
+            int rightOperand = a2.analyze();
+            if (rightOperand == 0) {
+                throw new AnalyzeException("Division by zero");
+            }
             return a1.analyze() / a2.analyze();
         }
 

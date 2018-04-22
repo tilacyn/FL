@@ -12,7 +12,7 @@ public class Element {
     }
 
     public enum Type{
-        NUMBER, LP, RP, PLUS, MULT, MINUS, DIV, DEG, END
+        NUMBER, LP, RP, PLUS, MULT, MINUS, DIV, DEG, END, SPACE, SLASHN
     }
 
     public boolean isNumber() {
@@ -45,6 +45,13 @@ public class Element {
 
     public boolean isDeg() {
         return t == Type.DEG;
+    }
+
+    public boolean isSpace() {
+        return t == Type.SPACE;
+    }
+    public boolean isSlashN() {
+        return t == Type.SLASHN;
     }
 
 

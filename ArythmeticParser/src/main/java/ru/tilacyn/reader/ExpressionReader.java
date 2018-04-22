@@ -20,20 +20,20 @@ public class ExpressionReader {
     }
 
     public ArrayList<Element> read() throws IOException, ExpressionParseException {
-        System.out.println("Lol");
-
         int c;
         while ((c = reader.read()) != -1) {
             input += (char) c;
         }
 
-        Element e;
+        //System.out.println(input);
 
-        int pos = 0;
+        Element e;
 
         while ((e = readElement()) != Element.END) {
             elements.add(e);
         }
+
+        elements.removeIf(element -> element.isSpace() || element.isSlashN());
 
         return elements;
     }
@@ -50,40 +50,56 @@ public class ExpressionReader {
         switch (f) {
             case '(':
                 e = new Element(Element.Type.LP);
+                break;
             case ')':
                 e = new Element(Element.Type.RP);
+                break;
             case '+':
                 e = new Element(Element.Type.PLUS);
+                break;
             case '-':
                 e = new Element(Element.Type.MINUS);
+                break;
             case '*':
                 e = new Element(Element.Type.MULT);
+                break;
             case '/':
                 e = new Element(Element.Type.DIV);
+                break;
             case '^':
                 e = new Element(Element.Type.DEG);
+                break;
+            case '\n':
+                e = new Element(Element.Type.SLASHN);
+                break;
+            case ' ':
+                e = new Element(Element.Type.SPACE);
+                break;
             default:
                 if (f > '9' || f < '0') {
-                    throw new ExpressionParseException();
+                    throw new ExpressionParseException("Unknown symbol");
                 }
                 if (f == '0') {
                     if (pos != input.length() - 1 && isDigit(input.charAt(pos + 1))) {
-                        e = new Element(0);
+                        throw new ExpressionParseException("0 is a first digit of a number");
                     } else {
-                        throw new ExpressionParseException();
+                        e = new Element(0);
                     }
-                    pos++;
+                    break;
                 }
+
+                pos++;
 
                 int n = f - '0';
 
-                while (isDigit(f = input.charAt(pos))) {
+                while (pos < input.length() && isDigit(f = input.charAt(pos))) {
                     n = add(n, f - '0');
                     pos++;
                 }
                 pos--;
 
                 e = new Element(n);
+                break;
         }
 
         pos++;

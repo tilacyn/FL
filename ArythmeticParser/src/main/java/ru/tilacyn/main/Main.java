@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
+
         if (args == null || args.length != 1) {
             System.out.println("Bad input, try again!");
             return;
@@ -45,6 +46,9 @@ public class Main {
             return;
         } catch (ExpressionParseException e) {
             System.out.println("Expression parsing failed");
+            if (e.get() != null) {
+                System.out.println(e.get());
+            }
             return;
         } catch (AnalyzeException e) {
             System.out.println(e.get());
@@ -52,5 +56,7 @@ public class Main {
         }
 
         System.out.println(result);
+        System.out.println();
+
     }
 }
